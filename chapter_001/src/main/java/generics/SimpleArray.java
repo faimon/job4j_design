@@ -16,24 +16,27 @@ public class SimpleArray<T> implements Iterable<T> {
     }
 
     public void set(int index, T model) {
-        if (index < data.length) {
-            data[index] = model;
+        if (index >= data.length) {
+            throw new IndexOutOfBoundsException();
         }
+        data[index] = model;
     }
 
     public void remove(int index) {
-        if (index < data.length) {
-            data[index] = null;
-            System.arraycopy(data, index + 1, data, index, data.length - 1 - index);
-            data[data.length - 1] = null;
+        if (index >= data.length) {
+            throw new IndexOutOfBoundsException();
         }
+        data[index] = null;
+        System.arraycopy(data, index + 1, data, index, data.length - 1 - index);
+        data[data.length - 1] = null;
     }
 
     public T get(int index) {
-        T rsl = null;
-        if (index < data.length) {
-           rsl = (T) data[index];
+        if (index >= data.length) {
+            throw new IndexOutOfBoundsException();
         }
+        T rsl = null;
+        rsl = (T) data[index];
         return rsl;
     }
 
