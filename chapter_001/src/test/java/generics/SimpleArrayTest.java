@@ -2,6 +2,9 @@ package generics;
 
 import org.junit.Test;
 
+import java.util.Iterator;
+import java.util.NoSuchElementException;
+
 import static org.hamcrest.CoreMatchers.nullValue;
 import static org.junit.Assert.*;
 import static org.hamcrest.CoreMatchers.is;
@@ -54,5 +57,28 @@ public class SimpleArrayTest {
         arr.add(1);
         arr.add(2);
         arr.remove(5);
+    }
+
+    @Test
+    public void WhenCheckHasNext() {
+        SimpleArray<Integer> arr = new SimpleArray<>(2);
+        arr.add(0);
+        arr.add(1);
+        Iterator<Integer> it = arr.iterator();
+        it.next();
+        assertThat(it.hasNext(), is(true));
+        it.next();
+        assertThat(it.hasNext(), is(false));
+    }
+
+    @Test(expected = NoSuchElementException.class)
+    public void WhenNoSuchElement() {
+        SimpleArray<Integer> arr = new SimpleArray<>(2);
+        arr.add(0);
+        arr.add(1);
+        Iterator<Integer> it = arr.iterator();
+        it.next();
+        it.next();
+        it.next();
     }
 }

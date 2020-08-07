@@ -2,6 +2,7 @@ package generics;
 
 import java.util.Iterator;
 import java.util.NoSuchElementException;
+import java.util.Objects;
 
 public class SimpleArray<T> implements Iterable<T> {
     private Object[] data;
@@ -16,25 +17,19 @@ public class SimpleArray<T> implements Iterable<T> {
     }
 
     public void set(int index, T model) {
-        if (index >= data.length) {
-            throw new IndexOutOfBoundsException();
-        }
-        data[index] = model;
+       Objects.checkIndex(index, point);
+       data[index] = model;
     }
 
     public void remove(int index) {
-        if (index >= data.length) {
-            throw new IndexOutOfBoundsException();
-        }
+        Objects.checkIndex(index, point);
         data[index] = null;
         System.arraycopy(data, index + 1, data, index, data.length - 1 - index);
         data[data.length - 1] = null;
     }
 
     public T get(int index) {
-        if (index >= data.length) {
-            throw new IndexOutOfBoundsException();
-        }
+        Objects.checkIndex(index, point);
         T rsl = null;
         rsl = (T) data[index];
         return rsl;
@@ -46,7 +41,7 @@ public class SimpleArray<T> implements Iterable<T> {
             private int position = 0;
             @Override
             public boolean hasNext() {
-                return position < data.length;
+                return position < point;
             }
 
             @Override
