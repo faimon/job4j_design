@@ -57,4 +57,18 @@ public class SimpleLinkedListTest {
         it.next();
         it.next();
     }
+
+    @Test
+    public void whenCheckIterator() {
+        SimpleLinkedList list = new SimpleLinkedList();
+        list.add(12);
+        list.add(5);
+        list.add(4);
+        list.add(10);
+        Iterator it = list.iterator();
+        assertThat(it.next(), is(12));
+        assertThat(it.next(), is(5));
+        assertThat(it.next(), is(4));
+        assertThat(it.next(), is(10));
+    }
 }

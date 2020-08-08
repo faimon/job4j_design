@@ -46,6 +46,7 @@ public class SimpleLinkedList<E> implements Iterable<E> {
         return new Iterator<E>() {
            private int modCountIt = modCount;
            private int position = 0;
+           private Node<E> elem;
             @Override
             public boolean hasNext() {
                 if (modCountIt != modCount) {
@@ -59,7 +60,9 @@ public class SimpleLinkedList<E> implements Iterable<E> {
                 if (!hasNext()) {
                     throw new NoSuchElementException();
                 }
-                return get(position++);
+                elem = position == 0 ? first : elem.next;
+                position++;
+                return elem.item;
             }
         };
     }
