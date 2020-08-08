@@ -7,6 +7,7 @@ import java.util.Objects;
 
 public class SimpleLinkedList<E> implements Iterable<E> {
     private int size = 0;
+    private int modCount = 0;
     private Node<E> first;
     private Node<E> last;
 
@@ -20,6 +21,7 @@ public class SimpleLinkedList<E> implements Iterable<E> {
             l.next = newNode;
         }
         size++;
+        modCount++;
     }
 
     public E get(int index) {
@@ -42,11 +44,11 @@ public class SimpleLinkedList<E> implements Iterable<E> {
     @Override
     public Iterator<E> iterator() {
         return new Iterator<E>() {
-           private int modCount = size;
+           private int modCountIt = modCount;
            private int position = 0;
             @Override
             public boolean hasNext() {
-                if (modCount != size) {
+                if (modCountIt != modCount) {
                     throw new ConcurrentModificationException();
                 }
                 return position < size;
