@@ -18,16 +18,17 @@ public class SimpleArrayList<T> implements Iterable<T> {
             container = Arrays.copyOf(container, newSize);
         }
         container[point++] = model;
+        modCount++;
     }
 
     @Override
     public Iterator<T> iterator() {
         return new Iterator<T>() {
-            int currentPosition = 0;
-            int modCount = point;
+           private int currentPosition = 0;
+           private int modCountIterator = modCount;
             @Override
             public boolean hasNext() {
-                if (modCount != point) {
+                if (modCountIterator != modCount) {
                     throw new ConcurrentModificationException();
                 }
                 return currentPosition < point;
@@ -37,9 +38,6 @@ public class SimpleArrayList<T> implements Iterable<T> {
             public T next() {
                 if (!hasNext()) {
                     throw new NoSuchElementException();
-                }
-                if (modCount != point) {
-                    throw new ConcurrentModificationException();
                 }
                 return (T) container[currentPosition++];
             }
