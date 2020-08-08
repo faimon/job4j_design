@@ -10,7 +10,6 @@ import java.util.Iterator;
 import java.util.NoSuchElementException;
 
 public class SimpleArrayTest {
-
     @Test
     public void whenAddThenGet() {
         SimpleArrayList<String> array = new SimpleArrayList<>();
