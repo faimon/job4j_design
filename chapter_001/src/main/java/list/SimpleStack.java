@@ -1,13 +1,18 @@
 package list;
 
+import java.util.Iterator;
+
 public class SimpleStack<T> {
     private ForwardLinked<T> linked = new ForwardLinked<T>();
 
     public T pop() {
-        return linked.deleteLast();
+        Iterator<T> it = linked.iterator();
+        T rsl = it.next();
+        linked.deleteFirst();
+        return rsl;
     }
 
     public void push(T value) {
-        linked.add(value);
+        linked.addFirst(value);
     }
 }
