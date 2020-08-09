@@ -4,13 +4,17 @@ public class SimpleQueue<T> {
     private final SimpleStack<T> in = new SimpleStack<>();
     private final SimpleStack<T> out = new SimpleStack<>();
     private int size = 0;
+    private int outSize = 0;
 
     public T poll() {
-        while (size != 0) {
-            T lastElement = in.pop();
-            out.push(lastElement);
-            size--;
+        if (outSize == 0) {
+            while (size != 0) {
+                out.push(in.pop());
+                outSize++;
+                size--;
+            }
         }
+        outSize = outSize == 0 ? 0 : outSize - 1;
         return out.pop();
     }
 
