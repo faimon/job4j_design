@@ -95,4 +95,32 @@ public class ForwardLinkedTest {
         Iterator<Integer> it = linked.iterator();
         assertThat(it.next(), is(4));
     }
+
+    @Test
+    public void whenAddAndAddFirst() {
+        ForwardLinked<Integer> linked = new ForwardLinked<>();
+        linked.add(11);
+        linked.add(4);
+        linked.addFirst(5);
+        linked.addFirst(999);
+        Iterator<Integer> it = linked.iterator();
+        assertThat(it.next(), is(999));
+        assertThat(it.next(), is(5));
+        assertThat(it.next(), is(11));
+        assertThat(it.next(), is(4));
+    }
+
+    @Test
+    public void whenAddFirstThenAdd() {
+        ForwardLinked<Integer> linked = new ForwardLinked<>();
+        linked.addFirst(5);
+        linked.add(10);
+        linked.addFirst(999);
+        linked.add(20);
+        Iterator<Integer> it = linked.iterator();
+        assertThat(it.next(), is(999));
+        assertThat(it.next(), is(5));
+        assertThat(it.next(), is(10));
+        assertThat(it.next(), is(20));
+    }
 }
