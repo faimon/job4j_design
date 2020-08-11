@@ -1,9 +1,6 @@
 package map;
 
-import java.util.Calendar;
-import java.util.GregorianCalendar;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 public class User {
     private String name;
@@ -16,14 +13,28 @@ public class User {
         this.birthday = birthday;
     }
 
-    public static void main(String[] args) {
-        User user1 = new User("Ivan", 2, new GregorianCalendar(1950, Calendar.JANUARY, 3));
-        User user2 = new User("Ivan", 2, new GregorianCalendar(1950, Calendar.JANUARY, 3));
-        Map<User, Object> map = new HashMap<>();
-        map.put(user1, "first");
-        map.put(user2, "second");
-        System.out.println(map);
-        System.out.println(user1.equals(user2));
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        User user = (User) o;
+        return children == user.children &&
+                Objects.equals(name, user.name) &&
+                Objects.equals(birthday, user.birthday);
+    }
 
+    @Override
+    public int hashCode() {
+        return Objects.hash(name, children, birthday);
+    }
+
+    public static void main(String[] args) {
+        SimpleHashMap<Integer, String> map = new SimpleHashMap<>();
+        for (int i = 0; i < 1600; i++) {
+            map.insert(i, Integer.toString(i));
+        }
+        for (int i = 0; i < 1600; i++) {
+            System.out.println("value = " + map.get(i));
+        }
     }
 }
