@@ -38,7 +38,7 @@ public class SimpleArrayTest {
         arr.set(10, 5);
     }
 
-    @Test
+    @Test (expected = IndexOutOfBoundsException.class)
     public void WhenRemove() {
         SimpleArray<Integer> arr = new SimpleArray<>(3);
         arr.add(0);
