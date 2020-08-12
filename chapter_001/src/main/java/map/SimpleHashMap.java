@@ -26,13 +26,17 @@ public class SimpleHashMap<K, V> implements Iterable<V> {
             modSize++;
             return true;
         }
-        while (table[index] != null) {
-            if (table[index].hash == hash(key) && table[index].key.equals(key)) {
-                break;
-            }
-            table[index] = table[index].next;
+        if (table[index].hash == hash(key) && table[index].key.equals(key)) {
+            table[index] = newNode;
+            return true;
         }
-        table[index] = newNode;
+        Node lastNode = table[index];
+        Node prev = table[index];
+        while (lastNode.next != null) {
+            prev = lastNode;
+            lastNode = lastNode.next;
+        }
+        prev.next = newNode;
         size++;
         modSize++;
         return true;
@@ -63,17 +67,17 @@ public class SimpleHashMap<K, V> implements Iterable<V> {
 
     public V get(K key) {
         int index = hash(key) & (tableSize - 1);
+        Node lastNode = table[index];
         if (table[index] == null) {
-            throw new NoSuchElementException();
+            return null;
         }
         if (table[index].hash == hash(key) && table[index].key.equals(key)) {
             return (V) table[index].value;
-        } else {
-            while (table[index].next != null) {
-                table[index] = table[index].next;
-                if (table[index].hash == hash(key) && table[index].key.equals(key)) {
-                    return (V) table[index].value;
-                }
+        }
+        while (lastNode.next != null) {
+            lastNode = lastNode.next;
+            if (lastNode.hash == hash(key) && lastNode.key.equals(key)) {
+                return (V) lastNode.value;
             }
         }
         return null;
@@ -85,14 +89,23 @@ public class SimpleHashMap<K, V> implements Iterable<V> {
         if (table[index] == null) {
             return false;
         }
-        while (table[index] != null) {
-            if (table[index].hash == hash && table[index].key.equals(key)) {
-                table[index] = null;
-                modSize--;
+        if (table[index].hash == hash && table[index].key.equals(key)) {
+            table[index] = null;
+            modSize++;
+            size--;
+            return true;
+        }
+        Node lastNode = table[index];
+        Node prev;
+        while (lastNode.next != null) {
+            prev = lastNode;
+            lastNode = lastNode.next;
+            if (lastNode.hash == hash && lastNode.key.equals(key)) {
+                prev.next = null;
+                modSize++;
                 size--;
                 return true;
             }
-            table[index] = table[index].next;
         }
         return false;
     }
