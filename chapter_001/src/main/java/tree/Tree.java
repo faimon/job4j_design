@@ -3,6 +3,7 @@ package tree;
 import java.util.LinkedList;
 import java.util.Optional;
 import java.util.Queue;
+import java.util.function.Predicate;
 
 public class Tree<E> implements SimpleTree<E>  {
     private final Node<E> root;
@@ -27,30 +28,25 @@ public class Tree<E> implements SimpleTree<E>  {
 
     @Override
     public Optional<Node<E>> findBy(E value) {
-        Optional<Node<E>> rsl = Optional.empty();
-        Queue<Node<E>> data = new LinkedList<>();
-        data.offer(this.root);
-        while (!data.isEmpty()) {
-            Node<E> el = data.poll();
-            if (el.value.equals(value)) {
-                rsl = Optional.of(el);
-                break;
-            }
-            data.addAll(el.childrens);
-        }
-        return rsl;
+        return Optional.ofNullable(findByPredicate(x -> x.value.equals(value)));
     }
 
     public boolean isBinary() {
+        Node<E> node = findByPredicate(x -> x.childrens.size() > 2);
+        return node == null;
+    }
+
+    private Node<E> findByPredicate(Predicate<Node> predicate) {
         Queue<Node<E>> data = new LinkedList<>();
+        Node<E> rsl = null;
         data.offer(this.root);
         while (!data.isEmpty()) {
             Node<E> el = data.poll();
-            if (el.childrens.size() > 2) {
-                return false;
+            if (predicate.test(el)) {
+                return el;
             }
             data.addAll(el.childrens);
         }
-        return true;
+       return rsl;
     }
 }
