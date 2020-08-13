@@ -46,6 +46,7 @@ public class User {
         map.insert(user2, "second");
         map.insert(user3, "third");
         map.insert(user4, "four");
+        map.delete(user3);
         System.out.println(map.get(user1));
         System.out.println(map.get(user2));
         System.out.println(map.get(user3));

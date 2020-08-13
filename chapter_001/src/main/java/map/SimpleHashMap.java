@@ -30,11 +30,16 @@ public class SimpleHashMap<K, V> implements Iterable<V> {
             table[index] = newNode;
             return true;
         }
-        Node lastNode = table[index];
-        Node prev = table[index];
-        while (lastNode.next != null) {
-            prev = lastNode;
-            lastNode = lastNode.next;
+        Node current = table[index];
+        Node prev = current;
+        while (current != null) {
+            if (current.hash == hash && current.key.equals(key)) {
+                current.value = value;
+                modSize++;
+                return true;
+            }
+            prev = current;
+            current = current.next;
         }
         prev.next = newNode;
         size++;
@@ -89,23 +94,24 @@ public class SimpleHashMap<K, V> implements Iterable<V> {
         if (table[index] == null) {
             return false;
         }
-        if (table[index].hash == hash && table[index].key.equals(key)) {
+        if (table[index].hash == hash && table[index].key.equals(key)
+                && table[index].next == null) {
             table[index] = null;
             modSize++;
             size--;
             return true;
         }
         Node lastNode = table[index];
-        Node prev;
+        Node prev = table[index];
         while (lastNode.next != null) {
-            prev = lastNode;
-            lastNode = lastNode.next;
             if (lastNode.hash == hash && lastNode.key.equals(key)) {
-                prev.next = null;
                 modSize++;
                 size--;
+                prev.next = prev.next.next;
                 return true;
             }
+            prev = lastNode;
+            lastNode = lastNode.next;
         }
         return false;
     }
