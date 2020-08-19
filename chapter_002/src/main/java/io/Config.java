@@ -16,14 +16,11 @@ public class Config {
 
     public void load() {
         try (BufferedReader in = new BufferedReader(new FileReader(this.path))) {
-            String line;
-            while (in.ready()) {
-                line = in.readLine();
-                if (!line.contains("//") && !line.isBlank()) {
-                    String[] split = line.split("=");
-                    values.put(split[0], split[1]);
-                }
-            }
+            in.lines()
+                    .filter(line -> !line.contains("//") && !line.isBlank())
+                    .forEach(line -> values.put(line.split("=")[0],
+                            line.split("=")[1]));
+
         } catch (Exception e) {
             e.printStackTrace();
         }
