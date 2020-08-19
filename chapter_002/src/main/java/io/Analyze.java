@@ -9,8 +9,7 @@ import java.util.Map;
 
 public class Analyze {
     public void unavailable(String source, String target) {
-        try (BufferedReader in = new BufferedReader(new FileReader(source));
-             PrintWriter out = new PrintWriter(new FileOutputStream(target))) {
+        try (BufferedReader in = new BufferedReader(new FileReader(source))) {
             Map<String, String> map = new HashMap<>();
             boolean isNeedValue = false;
             String line;
@@ -30,10 +29,12 @@ public class Analyze {
                     isNeedValue = true;
                 }
             }
+            PrintWriter out = new PrintWriter(new FileOutputStream(target));
             for (Map.Entry<String, String> elem: map.entrySet()
                  ) {
                 out.println(elem.getKey() + ";" + elem.getValue());
             }
+            out.close();
         } catch (Exception e) {
             e.printStackTrace();
         }
