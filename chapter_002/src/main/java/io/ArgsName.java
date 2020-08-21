@@ -18,9 +18,10 @@ public class ArgsName {
         }
         for (String st: args
              ) {
-            if (st.contains("=") && st.split("=").length == 2) {
-                String line = st.split("=")[0].replace("-", "");
-                values.put(line, st.split("=")[1]);
+            String[] massArg = st.split("=");
+            if (st.contains("=") && massArg.length == 2) {
+                String line = massArg[0].replace("-", "");
+                values.put(line, massArg[1]);
             }
         }
     }
