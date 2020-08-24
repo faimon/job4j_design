@@ -8,47 +8,50 @@ import java.util.Scanner;
 import java.util.stream.Collectors;
 
 public class ConsoleChat {
-    private List<String> input = new ArrayList<>();
+    private List<String> phrases = new ArrayList<>();
+    private List<String> log = new ArrayList<>();
+    private final String CONTINUE = "продолжить";
+    private final String STOP = "стоп";
+    private final String END = "закончить";
 
-    private void writeLog(String line, String path) {
+    private void writeLog(List<String> log, String path) {
         try (PrintWriter out = new PrintWriter(new BufferedOutputStream(
                 new FileOutputStream(path, true)))) {
-            out.write(line + System.lineSeparator());
+            log.forEach(l -> out.write(l + System.lineSeparator()));
         } catch (IOException e) {
             throw new IllegalArgumentException("Write error");
         }
     }
 
-    private String getPhrase(String path) {
-        String rsl;
+    private void readPhrases(String path) {
         try (BufferedReader in = new BufferedReader(new FileReader(path))) {
-            input = in.lines().collect(Collectors.toList());
-            rsl = input.get(new Random().nextInt(input.size() - 1));
+            phrases = in.lines().collect(Collectors.toList());
         } catch (IOException e) {
             throw new IllegalArgumentException("Wrong path file");
         }
-        return rsl;
     }
 
     public void start(String pathPhrases, String outPath) {
         String line;
         boolean stop = false;
         Scanner scanner = new Scanner(System.in);
+        readPhrases(pathPhrases);
         do {
             System.out.println("Введите что-нибудь:");
             line = scanner.nextLine();
-            writeLog(line, outPath);
-            if (line.equals("продолжить")) {
+            log.add(line);
+            if (line.equals(CONTINUE)) {
                 stop = false;
-            } else if (line.equals("стоп")) {
+            } else if (line.equals(STOP)) {
                 stop = true;
             }
             if (!stop) {
-                String phrase = getPhrase(pathPhrases);
+                String phrase = phrases.get(new Random().nextInt(phrases.size() - 1));
                 System.out.println(phrase);
-                writeLog(phrase, outPath);
+                log.add(phrase);
             }
-        } while (!line.equals("закончить"));
+        } while (!line.equals(END));
+        writeLog(log, outPath);
     }
 
     public static void main(String[] args) {
