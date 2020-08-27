@@ -7,29 +7,19 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
+import java.util.regex.Pattern;
 
 public class FileSearch {
-    private final String FULL_MATCH = "-f";
-    private final String REGEX = "-r";
-    private final String MASK = "-m";
+    private static final String REGEX = "-r";
 
     private List<Path> findByKey(String directory, String name,
                                 String typeSearch) throws IOException {
         Path start = Paths.get(directory);
-        SearchFiles searchFiles = new SearchFiles(file -> {
-            boolean rsl = false;
-            if (typeSearch.equals(FULL_MATCH)) {
-                rsl = file.getFileName().toString().equals(name);
-            } else if (typeSearch.equals(REGEX)) {
-                rsl = file.getFileName().toString().matches(name);
-            } else if (typeSearch.equals(MASK)) {
-                String fileName = name.replace("*", "");
-                rsl = file.getFileName().toString().contains(fileName);
-            }
-            return rsl;
-        });
-       Files.walkFileTree(start, searchFiles);
-       return searchFiles.getPaths();
+        Pattern regex = typeSearch.equals(REGEX) ? Pattern.compile(name) : null;
+        SearchFiles searchFiles = new SearchFiles(
+                file -> PredicateFactory.getBoolRsl(typeSearch, name, file, regex));
+        Files.walkFileTree(start, searchFiles);
+        return searchFiles.getPaths();
     }
 
     private void writeLog(List<Path> files, Path outPath) {
