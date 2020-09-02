@@ -9,7 +9,7 @@ WHERE name like '%Ice Cream%';
 
 // 3. Написать запрос, который выводит все продукты, срок годности которых заканчивается в следующем месяце.
 SELECT * FROM product
-WHERE expired_date BETWEEN '2020-09-02' AND '2020-10-01';
+WHERE expired_date BETWEEN CURRENT_DATE AND (CURRENT_DATE + INTERVAL'1 month');
 
 // 4. Написать запрос, который выводит самый дорогой продукт.
 SELECT * FROM product
