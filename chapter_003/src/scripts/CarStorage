@@ -1,0 +1,67 @@
+CREATE DATABASE car_storage;
+\c car_storage
+
+CREATE TABLE Car_Body(
+id serial primary key,
+name varchar(200)
+);
+CREATE TABLE Engine(
+id serial primary key,
+name varchar(200)
+);
+CREATE TABLE Transmission(
+id serial primary key,
+name varchar(200)
+);
+
+CREATE TABLE Car(
+id serial primary key,
+name varchar(200),
+body int references car_body(id),
+engine int references engine(id),
+transmission int references transmission(id)
+);
+
+INSERT INTO car_body(name) VALUES ('BMW X1');
+INSERT INTO car_body(name) VALUES ('BMW X2');
+INSERT INTO car_body(name) VALUES ('BMW X3');
+INSERT INTO car_body(name) VALUES ('BMW X4');
+INSERT INTO car_body(name) VALUES ('BMW X5');
+
+INSERT INTO engine(name) VALUES ('2.0L');
+INSERT INTO engine(name) VALUES ('3.0L');
+INSERT INTO engine(name) VALUES ('4.0L');
+INSERT INTO engine(name) VALUES ('5.0L');
+
+INSERT INTO transmission(name) VALUES ('Mechanic');
+INSERT INTO transmission(name) VALUES ('Automatic');
+INSERT INTO transmission(name) VALUES ('Robot');
+
+INSERT INTO Car(name, body, engine, transmission) VALUES ('AUTO BMW X1', 1, 1, 1);
+INSERT INTO Car(name, body, engine, transmission) VALUES ('AUTO BMW X1', 1, 1, 2);
+INSERT INTO Car(name, body, engine, transmission) VALUES ('AUTO BMW X1', 1, 3, 1);
+INSERT INTO Car(name, body, engine, transmission) VALUES ('AUTO BMW X3', 3, 3, 2);
+INSERT INTO Car(name, body, engine, transmission) VALUES ('AUTO BMW X4', 4, 3, 2);
+INSERT INTO Car(name, body, engine, transmission) VALUES ('AUTO BMW X4', 4, 3, 1);
+INSERT INTO Car(name, body, engine, transmission) VALUES ('AUTO BMW X5', 5, 4, 2);
+INSERT INTO Car(name, body, engine, transmission) VALUES ('AUTO BMW X5', 5, 4, 1);
+
+// 1. Вывести список всех машин и все привязанные к ним детали.
+SELECT car.id as number, car.name, b.name as body, e.name as engine, t.name as transmission
+from car
+JOIN Car_Body as b ON car.body = b.id
+JOIN engine as e ON car.engine = e.id
+JOIN transmission as t ON car.transmission = t.id;
+
+// 2. Вывести отдельно детали, которые не используются в машине, кузова, двигатели, коробки передач.
+SELECT b.name as body from car
+RIGHT OUTER JOIN Car_Body as b ON car.body = b.id
+where car.body is null;
+
+SELECT e.name as engine from car
+RIGHT OUTER JOIN engine as e ON car.engine = e.id
+where car.engine is null;
+
+SELECT t.name as transmission from car
+RIGHT OUTER JOIN transmission as t ON car.transmission = t.id
+where car.transmission is null;
