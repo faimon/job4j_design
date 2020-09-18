@@ -1,5 +1,6 @@
 package io;
 
+import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
@@ -30,7 +31,7 @@ public class FileSearchTest {
         }
     }
 
-    @Test
+    @Ignore
     public void whenMaskGetThreeFiles() throws IOException {
         File file1 = folder.newFile("acc.html");
         File file2 = folder.newFile("acc1.html");
