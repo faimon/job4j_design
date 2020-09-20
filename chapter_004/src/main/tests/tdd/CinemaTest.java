@@ -25,7 +25,7 @@ public class CinemaTest {
         Session session = new Session3D();
         Cinema cinema = new Cinema3D();
         cinema.add(session);
-        assertThat(session, is(cinema.find(ses -> ses.equals(session))));
+        assertThat(session, is(cinema.find(ses -> ses.equals(session)).get(0)));
     }
 
     @Test
